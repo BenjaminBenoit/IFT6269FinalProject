@@ -2,8 +2,7 @@
 
 ## TODO  
 * delete this todo section of the readme before sending source code  
-* implement IWAE  
-* implement Util.test  
+* implement IWAE    
 * implement IWAE_Training.py
 * run whole dataset
 * add logic to run the VAE using GPU  
