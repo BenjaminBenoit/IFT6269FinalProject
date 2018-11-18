@@ -8,6 +8,12 @@ This file contains all the Settings (constants) used accross the application
 
 class Settings:
     
-    TRAINING_DATASET_PATH='TODO.train'
-    TESTING_DATASET_PATH='TODO.test'
+    DATASET_PATH='./data'
+    
+    TRAINING_BATCH_SIZE = 1
+    TESTING_BATCH_SIZE = 1
+    
+    LOG_INFORMATION_INTERVAL = 10
+    
+    NUMBER_OF_EPOCH = 1
 

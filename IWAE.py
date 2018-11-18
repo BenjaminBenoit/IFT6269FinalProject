@@ -21,5 +21,23 @@ class IWAE:
     
     
     def __init__(self):
-        
         print("todo")
+        
+    def train(self):
+        print("TODO : implement training")
+        
+    def eval(self):
+        print("TODO : implement evaluation")
+        
+        
+        
+class VAE:
+
+    def __init__(self):
+        print("todo")
+        
+    def train(self):
+        print("TODO : implement training")
+        
+    def eval(self):
+        print("TODO : implement evaluation")
