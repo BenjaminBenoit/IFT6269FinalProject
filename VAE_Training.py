@@ -36,7 +36,7 @@ optimizer = optim.Adam(modelVAE.parameters(), lr=Settings.LEARNING_RATE)
 
 for indexEpoch in range(1, Settings.NUMBER_OF_EPOCH+1):
     Util.train(modelVAE, trainLoader, optimizer, indexEpoch)
-    #Util.test(modelVAE, testLoader, optimizer, indexEpoch)
+    Util.test(modelVAE, testLoader, indexEpoch)
 
 
 

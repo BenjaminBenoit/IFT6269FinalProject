@@ -20,8 +20,6 @@ import torch.nn.functional as Functional
 
 class Util:
     
-
-    
     def train(model, trainLoader, optimizer, epoch):
         model.train()
         trainLoss = 0
@@ -42,21 +40,19 @@ class Util:
               epoch, trainLoss / len(trainLoader.dataset)))
         
         
-    def test(model, testLoader):
+    def test(model, testLoader, epoch):
         model.eval()
         testLoss = 0
-        correctGuesses = 0
         
-        for data, target in testLoader:
-            output = model(data)
-            testLoss += Functional.nll_loss(output, target, reduction='sum').item()
-            prediction = output.max(1, keepdim=True)[1]
-            correctGuesses += prediction.eq(target.view_as(prediction)).sum().item()
-            
+        # No gradient descent is being made during testing
+        with torch.no_grad():
+            for index, (data, _) in enumerate(testLoader):
+                posteriorResults, mu, logvar = model(data)
+                loss = Util.calculateLoss(posteriorResults, mu, logvar, data)             
+                testLoss += loss.item()
+
         testLoss /= len(testLoader.dataset)
-        print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-            testLoss, correctGuesses, len(testLoader.dataset),
-            100. * correctGuesses / len(testLoader.dataset)))
+        print('====> Test set loss: {:.4f}'.format(testLoss))
         
         
     # The objective function is made of two terms

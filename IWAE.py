@@ -75,7 +75,7 @@ class VAE(nn.Module):
     # Return P(X|z)
     def decode(self, z):
         decoderHiddenLayerOutput = Functional.relu(self.decoderHiddenLayer(z))
-        return Functional.sigmoid(self.outputLayer(decoderHiddenLayerOutput))
+        return torch.sigmoid(self.outputLayer(decoderHiddenLayerOutput))
     
     # Override the forward method of nn.Module
     # Explicit a way to do a forward pass through the VAE
