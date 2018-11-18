@@ -1,5 +1,16 @@
 # IFT6269 Final Project - VAE and IWAE
 
+## TODO  
+* delete this todo section of the readme before sending source code  
+* implement IWAE  
+* implement Util.test  
+* implement IWAE_Training.py
+* run whole dataset
+* add logic to run the VAE using GPU  
+* double check the comments and verify if everything is ok (add, remove, modify if necessary)  
+* either put the VAE in its own file (VAE.py) or implement a IWAE which can be initialize as a VAE  
+
+
 ## Methodology
 Steps to share the source code :  
 * git add .  
@@ -15,7 +26,7 @@ The versions used are the following :
 Python version : 3.6.1  
 Numpy version : 1.12.1  
 Spyder version : 3.2.4  
-Pytorch version : 0.3.1.post2  
+Pytorch version : 0.4.1
 
 
 ## Content  

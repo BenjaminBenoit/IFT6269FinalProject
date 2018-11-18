@@ -12,26 +12,34 @@ UTILIY CLASS
 
 
 ######## IMPORT
+import torch
 from Settings import Settings
 import torch.nn.functional as Functional
 
 ######## UTIL
 
-
 class Util:
     
+
     
-    def train(model, trainLoader, epoch):
+    def train(model, trainLoader, optimizer, epoch):
         model.train()
-        
-        for batch_idx, (data, target) in enumerate(trainLoader):
-            output = model(data)
-            loss = Functional.nll_loss(output, target)
+        trainLoss = 0
+        for batchIndex, (data, target) in enumerate(trainLoader):
+            # re-initialize the gradient computation
+            optimizer.zero_grad()
+            posteriorResults, mu, logvar = model(data)
+            loss = Util.calculateLoss(posteriorResults, mu, logvar, data)
             loss.backward()
-            if batch_idx % Settings.LOG_INFORMATION_INTERVAL == 0:
+            trainLoss += loss.item()
+            optimizer.step()
+            if batchIndex % Settings.LOG_INFORMATION_INTERVAL == 0:
                 print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, batch_idx * len(data), len(trainLoader.dataset),
-                    100. * batch_idx / len(trainLoader), loss.item()))
+                    epoch, batchIndex * len(data), len(trainLoader.dataset),
+                    100. * batchIndex / len(trainLoader), loss.item()))
+                
+        print('====> Epoch: {} Average loss: {:.4f}'.format(
+              epoch, trainLoss / len(trainLoader.dataset)))
         
         
     def test(model, testLoader):
@@ -49,7 +57,17 @@ class Util:
         print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             testLoss, correctGuesses, len(testLoader.dataset),
             100. * correctGuesses / len(testLoader.dataset)))
-            
+        
+        
+    # The objective function is made of two terms
+    # First term is the KL divergence between two distributions : Q(z|X) and P(z|X)
+    # Q being the distribution of our latent variables and P the true distribution of our data
+    # The second term is the Binary cross entropy
+    def calculateLoss(posteriorResults, mu, logvar, x):
+        binaryCrossEntropy = Functional.binary_cross_entropy(posteriorResults, x.view(-1, 784), reduction='sum')
+        klDivergence = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+        return binaryCrossEntropy + klDivergence
+
 
     def saveFigure(fileName, axes):
         print("Todo")

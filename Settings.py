@@ -16,4 +16,6 @@ class Settings:
     LOG_INFORMATION_INTERVAL = 10
     
     NUMBER_OF_EPOCH = 1
+    
+    LEARNING_RATE = 0.001
 
