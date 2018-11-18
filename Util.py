@@ -19,11 +19,18 @@ import torch.nn.functional as Functional
 ######## UTIL
 
 class Util:
+
+    # Raise an exception if settings device use GPU but cuda is not available
+    def checkDeviceAndCudaAvailability():
+        if Settings.DEVICE == "cuda" and not torch.cuda.is_available():
+            print("Settings.DEVICE specify a GPU computation but CUDA is not available")
+            raise
     
     def train(model, trainLoader, optimizer, epoch):
         model.train()
         trainLoss = 0
         for batchIndex, (data, target) in enumerate(trainLoader):
+            data = data.to(Settings.DEVICE)
             # re-initialize the gradient computation
             optimizer.zero_grad()
             posteriorResults, mu, logvar = model(data)
@@ -47,6 +54,7 @@ class Util:
         # No gradient descent is being made during testing
         with torch.no_grad():
             for index, (data, _) in enumerate(testLoader):
+                data = data.to(Settings.DEVICE)
                 posteriorResults, mu, logvar = model(data)
                 loss = Util.calculateLoss(posteriorResults, mu, logvar, data)             
                 testLoss += loss.item()

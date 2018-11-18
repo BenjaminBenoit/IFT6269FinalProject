@@ -1,11 +1,19 @@
 # IFT6269 Final Project - VAE and IWAE
 
+## GPU / CPU switch
+To run the model on GPU : in Settings.py, put the parameter DEVICE to 'cuda'  
+To run the model on CPU : in Settings.py, put the parameter DEVICE to 'cpu'  
+
+
+## Run experimentation
+To get the results of the VAE experimentations, run the VAE_Training.py file
+To get the results of the IWAE experimentations, run the IWAE_Training.py file
+
 ## TODO  
 * delete this todo section of the readme before sending source code  
 * implement IWAE    
 * implement IWAE_Training.py
 * run whole dataset
-* add logic to run the VAE using GPU  
 * double check the comments and verify if everything is ok (add, remove, modify if necessary)  
 * either put the VAE in its own file (VAE.py) or implement a IWAE which can be initialize as a VAE  
 

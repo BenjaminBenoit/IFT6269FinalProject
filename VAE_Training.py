@@ -21,6 +21,9 @@ from torchvision import datasets, transforms
 
 ######## MAIN
 
+
+Util.checkDeviceAndCudaAvailability()
+
 currentTransform = transforms.ToTensor()
 
 # First time running this code, it is needed to put the download value to True instead of False
@@ -28,10 +31,14 @@ currentTransform = transforms.ToTensor()
 currentTrainingDataset = datasets.MNIST(Settings.DATASET_PATH, train=True, download=False, transform=currentTransform)
 currentTestingDataset = datasets.MNIST(Settings.DATASET_PATH, train=False, download=False, transform=currentTransform)
 
-trainLoader = torch.utils.data.DataLoader(currentTrainingDataset, batch_size=Settings.TRAINING_BATCH_SIZE, shuffle=True)
-testLoader = torch.utils.data.DataLoader(currentTestingDataset, batch_size=Settings.TESTING_BATCH_SIZE, shuffle=True)
+kwargs = {}
+if(Settings.DEVICE == "cuda"):
+    kwargs = {'num_workers': Settings.NUMBER_OF_WORKERS, 'pin_memory': Settings.PIN_MEMORY}
 
-modelVAE = VAE()
+trainLoader = torch.utils.data.DataLoader(currentTrainingDataset, batch_size=Settings.TRAINING_BATCH_SIZE, shuffle=True, **kwargs)
+testLoader = torch.utils.data.DataLoader(currentTestingDataset, batch_size=Settings.TESTING_BATCH_SIZE, shuffle=True, **kwargs)
+
+modelVAE = VAE().to(Settings.DEVICE)
 optimizer = optim.Adam(modelVAE.parameters(), lr=Settings.LEARNING_RATE)
 
 for indexEpoch in range(1, Settings.NUMBER_OF_EPOCH+1):
