@@ -7,7 +7,7 @@ PROJECT
 """
 ######## DESCRIPTION
 # This file give the training results for VAE model on MNIST
-# NV: And saves the model
+
 
 
 ######## IMPORT
