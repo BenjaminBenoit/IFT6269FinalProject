@@ -22,7 +22,7 @@ Load model:
 
 
 ## Load model info (hyperparameters)
-* np.load(PATH).to_dict
+* np.load(PATH).item()
 
 
 ## TODO  
