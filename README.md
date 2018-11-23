@@ -11,13 +11,12 @@ To get the results of the IWAE experimentations, run the IWAE_Training.py file
 
 ## To save and load models (and hyperparameters)
 Save on GPU, Load on CPU
-
 Save:
- torch.save(model.state_dict(), PATH)
+* torch.save(model.state_dict(), PATH)
 Load:
-  device = torch.device('cpu')
-  model = TheModelClass(*args, **kwargs)
-  model.load_state_dict(torch.load(PATH, map_location=device))
+* device = torch.device('cpu')
+* model = TheModelClass(*args, **kwargs)
+* model.load_state_dict(torch.load(PATH, map_location=device))
 
 
 ## TODO  
