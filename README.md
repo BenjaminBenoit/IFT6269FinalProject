@@ -9,6 +9,16 @@ To run the model on CPU : in Settings.py, put the parameter DEVICE to 'cpu'
 To get the results of the VAE experimentations, run the VAE_Training.py file
 To get the results of the IWAE experimentations, run the IWAE_Training.py file
 
+## To save and load models (and hyperparameters)
+Save on GPU, Load on CPU
+Save:
+ torch.save(model.state_dict(), PATH)
+Load:
+  device = torch.device('cpu')
+  model = TheModelClass(*args, **kwargs)
+  model.load_state_dict(torch.load(PATH, map_location=device))
+
+
 ## TODO  
 * delete this todo section of the readme before sending source code  
 * implement IWAE    
