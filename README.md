@@ -12,13 +12,16 @@ To get the results of the IWAE experimentations, run the IWAE_Training.py file
 ## To save and load models (and hyperparameters)
 Save on GPU, Load on CPU
 
-Save:
+Save model:
 * torch.save(model.state_dict(), PATH)
 
-Load:
+Load model:
 * device = torch.device('cpu')
 * model = TheModelClass(*args, **kwargs)
 * model.load_state_dict(torch.load(PATH, map_location=device))
+
+Load model_info
+* np.load(Savings/model_info.npy).to_dict
 
 
 ## TODO  
@@ -49,9 +52,9 @@ Pytorch version : 0.4.1
 
 
 ## Content  
-IWAE.py : implementation of the IWAE  
+IWAE.py : implementation of the IWAE & VEA models  
 Settings.py : constants used accross the application  
 Util.py : methods used accross the application  
 VAE_Training.py : training of the VAE on MNIST  
 IWAE_Training.py : training of the IWAE on MNIST  
-
+Savings : Where models get saved (model_state_dict.pth) & dict of model parameters (model_info.npy)
