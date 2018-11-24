@@ -22,7 +22,8 @@ Load model:
 
 
 ## Load model info (hyperparameters)
-* np.load(PATH).item()    ---Bien mettre le .item() pour utiliser comme dict---
+* np.load(PATH).item()    
+---Bien mettre le .item() pour utiliser comme dict---
 
 
 
