@@ -14,21 +14,55 @@ IWAE and VAE implementation
 ######## IMPORT
 import torch
 from torch import nn
+from Settings import Settings
 import torch.nn.functional as Functional
 
 
-######## MODEL
+######## IWAE MODEL
 
 # Inherit the nn.Module class which implement methods such as train and eval
 class IWAE(nn.Module):
     
-    
     def __init__(self):
-        print("todo")
+        # Initialization of neuralNetwork.Module from pytorch
+        super(IWAE, self).__init__()
+        
+        self.inputLayer = nn.Linear(784,400)
+        self.meanLayer = nn.Linear(400,20)
+        self.varianceLayer = nn.Linear(400,20)
+        self.decoderHiddenLayer = nn.Linear(20,400)
+        self.outputLayer = nn.Linear(400,784)
+     
+    def encode(self, x):
+        inputLayerOutput = Functional.relu(self.inputLayer(x))
+        return self.meanLayer(inputLayerOutput), self.varianceLayer(inputLayerOutput)
+    
+    # Unlike the VAE, we will not sample only one z but several
+    def sampleZList(self, mu, logvar):
+        sampleZList = []
+        for indexGaussianSampler in range(1, Settings.NUMBER_OF_GAUSSIAN_SAMPLERS+1):
+            epsilon = torch.randn_like(logvar)
+            standardDeviation = torch.exp(logvar / 2)
+            sampleZList.append(mu + standardDeviation * epsilon)
+        return sampleZList
+    
+    # Once again unlike the VAE, we will decode several time : one for each sample z
+    def decode(self, zList):
+        outputList = []
+        for indexGaussianSampler, z in enumerate(zList):
+            decoderHiddenLayerOutput = Functional.relu(self.decoderHiddenLayer(z))
+            output = torch.sigmoid(self.outputLayer(decoderHiddenLayerOutput))
+            outputList.append(output)
+        return outputList
+    
+    def forward(self, x):
+        mu, logvar = self.encode(x.view(-1,784))
+        zList = self.sampleZList(mu, logvar)
+        return self.decode(zList), mu, logvar
         
         
         
-        
+######## VAE MODEL      
 
 # See 5.Experiment from Kingma publication
 # Encoder and Decoder have the same number of hidden layers

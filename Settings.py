@@ -35,3 +35,10 @@ class Settings:
     # ('Use pinned memory buffers' part)
     # If execution of the program freeze, put this parameter to false
     PIN_MEMORY = True
+    
+    
+    # ==== IWAE SETTINGS
+    NUMBER_OF_GAUSSIAN_SAMPLERS = 2
+    
+    
+    

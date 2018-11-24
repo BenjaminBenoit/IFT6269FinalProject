@@ -43,7 +43,7 @@ class Util:
             # re-initialize the gradient computation
             optimizer.zero_grad()
             posteriorResults, mu, logvar = model(data)
-            loss = Util.calculateLoss(posteriorResults, mu, logvar, data)
+            loss = Util.calculateLossVAE(posteriorResults, mu, logvar, data)
             loss.backward()
             trainLoss += loss.item()
             optimizer.step()
@@ -67,7 +67,7 @@ class Util:
                 qt_data += len(data)
                 data = data.to(Settings.DEVICE)
                 posteriorResults, mu, logvar = model(data)
-                loss = Util.calculateLoss(posteriorResults, mu, logvar, data) 
+                loss = Util.calculateLossVAE(posteriorResults, mu, logvar, data) 
                 lossCumul += loss.item()
                 
         lossCumul /= qt_data
@@ -78,11 +78,11 @@ class Util:
     
     
         
-    # The objective function is made of two terms
+    # The objective function for the VAE is made of two terms
     # First term is the KL divergence between two distributions : Q(z|X) and P(z|X)
     # Q being the distribution of our latent variables and P the true distribution of our data
     # The second term is the Binary cross entropy
-    def calculateLoss(posteriorResults, mu, logvar, x):
+    def calculateLossVAE(posteriorResults, mu, logvar, x):
         binaryCrossEntropy = Functional.binary_cross_entropy(posteriorResults, x.view(-1, 784), reduction='sum')
         klDivergence = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
         return binaryCrossEntropy + klDivergence

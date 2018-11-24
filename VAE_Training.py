@@ -30,8 +30,6 @@ currentTransform = transforms.ToTensor()
 
 ######## LOAD DATA
 
-# First time running this code, it is needed to put the download value to True instead of False
-# Ensure that an empy folder named 'data' is created in the same folder as this file source code
 currentTrainingDataset = datasets.MNIST(Settings.DATASET_PATH, train=True, download=False, transform=currentTransform)
 currentTestingDataset = datasets.MNIST(Settings.DATASET_PATH, train=False, download=False, transform=currentTransform)
 
