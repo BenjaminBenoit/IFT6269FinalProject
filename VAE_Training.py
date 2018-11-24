@@ -62,7 +62,6 @@ for indexEpoch in range(1, Settings.NUMBER_OF_EPOCH+1):
     losses[0].append(Util.train(modelVAE, trainLoader, optimizer, indexEpoch))
     losses[1].append(Util.eval(modelVAE, validLoader, indexEpoch, "Valid"))
     losses[2].append(Util.eval(modelVAE, testLoader, indexEpoch, "Test"))
-    print(losses)
     qt_epoch = indexEpoch                   #To be able to save 
     
     # If at least 2 losses 
