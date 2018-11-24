@@ -40,9 +40,9 @@ class IWAE(nn.Module):
     # Unlike the VAE, we will not sample only one z but several
     def sampleZList(self, mu, logvar):
         sampleZList = []
+        standardDeviation = torch.exp(logvar / 2)
         for indexGaussianSampler in range(1, Settings.NUMBER_OF_GAUSSIAN_SAMPLERS+1):
             epsilon = torch.randn_like(logvar)
-            standardDeviation = torch.exp(logvar / 2)
             sampleZList.append(mu + standardDeviation * epsilon)
         return sampleZList
     
