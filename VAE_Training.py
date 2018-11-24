@@ -78,10 +78,10 @@ for indexEpoch in range(1, Settings.NUMBER_OF_EPOCH+1):
 info = {'qt_epoch': qt_epoch, 'lr': Settings.LEARNING_RATE, \
         'batch_size': Settings.TRAINING_BATCH_SIZE,\
         'losses': losses}       
-np.save('model_info.npy', losses)
+np.save('Savings/model_info.npy', losses)
 
 # Save trained model
-torch.save(modelVAE.state_dict(), "model_state_dict.pth")
+torch.save(modelVAE.state_dict(), "Savings/model_state_dict.pth")
     
     
     
