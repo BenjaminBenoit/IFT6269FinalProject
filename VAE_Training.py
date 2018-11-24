@@ -16,9 +16,9 @@ PROJECT
 import torch
 import numpy as np
 from IWAE import VAE
-from NV_Util import Util
+from Util import Util
 from torch import optim
-from NV_Settings import Settings
+from Settings import Settings
 from torchvision import datasets, transforms
 
 

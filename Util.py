@@ -13,7 +13,7 @@ UTILIY CLASS
 
 ######## IMPORT
 import torch
-from NV_Settings import Settings
+from Settings import Settings
 import torch.nn.functional as Functional
 import numpy as np
 from torch.utils.data.sampler import SubsetRandomSampler
