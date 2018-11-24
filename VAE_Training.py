@@ -15,7 +15,7 @@ PROJECT
 ######## IMPORT
 import torch
 import numpy as np
-from IWAE import VAE
+from IWAE import IWAE
 from Util import Util
 from torch import optim
 from Settings import Settings
@@ -44,7 +44,8 @@ testLoader = torch.utils.data.DataLoader(currentTestingDataset, batch_size=Setti
 
 ######## CREATE MODEL
 
-modelVAE = VAE().to(Settings.DEVICE)
+# VAE is a special case of IWAE for which we take only 1 sample z
+modelVAE = IWAE(Settings.NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_VAE).to(Settings.DEVICE)
 optimizer = optim.Adam(modelVAE.parameters(), lr=Settings.LEARNING_RATE)
 
 

@@ -71,10 +71,10 @@ for indexEpoch in range(1, Settings.NUMBER_OF_EPOCH+1):
 info = {'qt_epoch': qt_epoch, 'lr': Settings.LEARNING_RATE, \
         'batch_size': Settings.TRAINING_BATCH_SIZE,\
         'losses': losses}    
-"""   
+ 
 np.save('Savings/model_info.npy', losses)
 
 # Save trained model
 torch.save(modelIWAE.state_dict(), "Savings/model_state_dict.pth")
 
-"""
+

@@ -14,7 +14,6 @@ UTILIY CLASS
 ######## IMPORT
 import torch
 import numpy as np
-from torch.autograd import Variable
 from Settings import Settings
 import torch.nn.functional as Functional
 from torch.utils.data.sampler import SubsetRandomSampler
@@ -29,9 +28,7 @@ class Util:
         if Settings.DEVICE == "cuda" and not torch.cuda.is_available():
             print("Settings.DEVICE specify a GPU computation but CUDA is not available")
             raise
-  
-    
-    
+
 
     def train(model, trainLoader, optimizer, epoch):
         model.train()
@@ -56,7 +53,6 @@ class Util:
         return trainLoss
         
         
-        
     def eval(model, Loader, epoch, setType):         # SetType is 'Valid' or 'Test'
         model.eval()
         lossCumul = 0
@@ -77,20 +73,20 @@ class Util:
         return lossCumul
         
     
-    
-        
-    # The objective function for the VAE is made of two terms
-    # First term is the KL divergence between two distributions : Q(z|X) and P(z|X)
-    # Q being the distribution of our latent variables and P the true distribution of our data
-    # The second term is the Binary cross entropy
+
     def calculateLossVAE(posteriorResults, mu, logvar, x):
         binaryCrossEntropy = Functional.binary_cross_entropy(posteriorResults, x.view(-1, 784), reduction='sum')
         klDivergence = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
         return binaryCrossEntropy + klDivergence
     
     
-    # See equation 14 from Burda's publication
-    # Note : if there is only one gaussian sampler, then calculateLoss is equivalent to calculateLossVAE
+    # The objective function for the IWAE is made of two terms
+    # First term is the KL divergence between two distributions : Q(z|X) and P(z|X)
+    # Q being the distribution of our latent variables and P the true distribution of our data
+    # The second term is the Binary cross entropy
+    # IWAE add an element in the loss calculation which is a normalize weight for each posteriors
+    # Note : if there is only one gaussian sampler, the IWAE loss calculation is the same as for the VAE
+    # Also see equation 14 from Burda's publication
     def calculateLoss(posteriorResults, mu, logvar, x):
         loss = 0
         costs = []
@@ -117,8 +113,6 @@ class Util:
 
     def createGraphic(titleFigure, fileName, data):
         print("Todo")
-        
-        
         
     
     def splitTrainSet(train_dataset, ratio=0.1):
