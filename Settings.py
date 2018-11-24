@@ -8,8 +8,22 @@ This file contains all the Settings (constants) used accross the application
 
 class Settings:
     
+    
+    # =============================================================== FILE PATH
     DATASET_PATH='./data'
     
+    # file path for vae saving results (only used if SAVE_RESULTS = True)
+    SAVE_INFO_PATH_VAE = "Savings/model_info.npy"
+    # file path for saving vae model (only used if SAVE_RESULTS = True)
+    SAVE_MODEL_PATH_VAE = "Savings/model_state_dict.pth"
+    
+    # file path for saving iwae results (only used if SAVE_RESULTS = True)
+    SAVE_INFO_PATH_IWAE = "Savings/iwae_model_info.npy"
+    # file path for saving iwae model (only used if SAVE_RESULTS = True)
+    SAVE_MODEL_PATH_IWAE = "Savings/iwae_model_state_dict.pth"
+    
+    
+    # ================================================== MODEL RELATED SETTINGS
     TRAINING_BATCH_SIZE = 128
     VALID_BATCH_SIZE = 128
     TESTING_BATCH_SIZE = 128
@@ -17,11 +31,20 @@ class Settings:
     # TODO : check if it is still needed ?
     LOG_INFORMATION_INTERVAL = 1000
     
-    NUMBER_OF_EPOCH = 1
+    NUMBER_OF_EPOCH = 4
     LOSSVARIATION = 0.0001         # Stop training if variation is smaller than it
     
     LEARNING_RATE = 0.001
     
+    # Number of gaussian samplers when initializing an IWAE
+    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE = 2
+    
+    # An IWAE with only one gaussian sampler is equivalent to a VAE
+    # Here it is a constant used to initialize the VAE and it shouldn't be modified
+    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_VAE = 1
+    
+
+    # =========================================================== CUDA SETTINGS
     # Whether or not the model should run on the CPU or GPU
     # If DEVICE="cpu" then the model run on CPU
     # If DEVICE="cuda" then the model run on GPU
@@ -37,11 +60,10 @@ class Settings:
     # If execution of the program freeze, put this parameter to false
     PIN_MEMORY = True
     
-    # Number of gaussian samplers when initializing an IWAE
-    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE = 2
     
-    # An IWAE with only one gaussian sampler is equivalent to a VAE
-    # Here it is a constant used to initialize the VAE and it shouldn't be modified
-    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_VAE = 1
+    # ========================================================== OTHER SETTINGS
+    # Whether or not after training-validating-testing a model, we want to save results
+    # Possible values are True or False
+    SAVE_RESULTS = True
     
     

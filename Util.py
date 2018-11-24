@@ -143,8 +143,40 @@ class Util:
                                                         batch_size=Settings.VALID_BATCH_SIZE, 
                                                         sampler=validation_sampler)
         
-        return train_loader, validation_loader
-     
+        return train_loader, validation_loader    
+    
+
+    def runTrainValidTestOnModel(model, optimizer, trainLoader, validLoader, 
+                                 testLoader, saveInfoPath, saveModelPath):
+        
+        # Keep loosses at each Epoch [[train], [valid], [test]]
+        losses = [[],[],[]]
+        qt_epoch = 0
+        
+        for indexEpoch in range(1, Settings.NUMBER_OF_EPOCH+1):
+            
+            losses[0].append(Util.train(model, trainLoader, optimizer, indexEpoch))
+            losses[1].append(Util.eval(model, validLoader, indexEpoch, "Valid"))
+            losses[2].append(Util.eval(model, testLoader, indexEpoch, "Test"))
+            qt_epoch = indexEpoch                   #To be able to save 
+            
+            # If at least 2 losses 
+            if indexEpoch >= 2:
+                train_loss_variation = abs(losses[0][-1] - losses[0][-2])
+                # Stop if train loss variation between 2 epoch smaller Settings.LOSSVARIATION
+                if train_loss_variation < Settings.LOSSVARIATION: 
+                    break
+        
+            
+        ######## SAVE 
+        if Settings.SAVE_RESULTS:
+            info = {'qt_epoch': qt_epoch, 'lr': Settings.LEARNING_RATE, \
+                    'batch_size': Settings.TRAINING_BATCH_SIZE,\
+                    'losses': losses}       
+            np.save(saveInfoPath, info)
+            
+            # Save trained model
+            torch.save(model.state_dict(), saveModelPath) 
     
     
     

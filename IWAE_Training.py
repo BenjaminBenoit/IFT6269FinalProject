@@ -11,7 +11,6 @@ PROJECT
 
 ######## IMPORT
 import torch
-import numpy as np
 from IWAE import IWAE
 from Util import Util
 from torch import optim
@@ -19,12 +18,14 @@ from Settings import Settings
 from torchvision import datasets, transforms
 
 
-Util.checkDeviceAndCudaAvailability()
+######## CUDA AVAILABILITY CHECK
 
-currentTransform = transforms.ToTensor()
+Util.checkDeviceAndCudaAvailability()
 
 
 ######## LOAD DATA
+
+currentTransform = transforms.ToTensor()
 
 currentTrainingDataset = datasets.MNIST(Settings.DATASET_PATH, train=True, download=False, transform=currentTransform)
 currentTestingDataset = datasets.MNIST(Settings.DATASET_PATH, train=False, download=False, transform=currentTransform)
@@ -44,37 +45,14 @@ modelIWAE = IWAE(Settings.NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE).to(Settings.DEVI
 optimizer = optim.Adam(modelIWAE.parameters(), lr=Settings.LEARNING_RATE)
 
 
+######## RUN TRAINING, VALIDATION AND TESTING
 
-######## TRAIN
-
-# Keep loosses at each Epoch [[train], [valid], [test]]
-losses = [[],[],[]]
-qt_epoch = 0
-
-for indexEpoch in range(1, Settings.NUMBER_OF_EPOCH+1):
-    
-    losses[0].append(Util.train(modelIWAE, trainLoader, optimizer, indexEpoch))
-    losses[1].append(Util.eval(modelIWAE, validLoader, indexEpoch, "Valid"))
-    losses[2].append(Util.eval(modelIWAE, testLoader, indexEpoch, "Test"))
-    qt_epoch = indexEpoch                   #To be able to save 
-    
-    # If at least 2 losses 
-    if indexEpoch >= 2:
-        train_loss_variation = abs(losses[0][-1] - losses[0][-2])
-        # Stop if train loss variation between 2 epoch smaller Settings.LOSSVARIATION
-        if train_loss_variation < Settings.LOSSVARIATION: 
-            break
-
-    
-######## SAVE 
-
-info = {'qt_epoch': qt_epoch, 'lr': Settings.LEARNING_RATE, \
-        'batch_size': Settings.TRAINING_BATCH_SIZE,\
-        'losses': losses}    
- 
-np.save('Savings/model_info.npy', losses)
-
-# Save trained model
-torch.save(modelIWAE.state_dict(), "Savings/model_state_dict.pth")
-
+Util.runTrainValidTestOnModel(
+        modelIWAE, 
+        optimizer, 
+        trainLoader,
+        validLoader,
+        testLoader,
+        Settings.SAVE_INFO_PATH_IWAE,
+        Settings.SAVE_MODEL_PATH_IWAE)
 
