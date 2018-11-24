@@ -71,13 +71,6 @@ class Util:
         print('======> {} loss: {:.4f}'.format(setType, lossCumul))
         
         return lossCumul
-        
-    
-
-    def calculateLossVAE(posteriorResults, mu, logvar, x):
-        binaryCrossEntropy = Functional.binary_cross_entropy(posteriorResults, x.view(-1, 784), reduction='sum')
-        klDivergence = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
-        return binaryCrossEntropy + klDivergence
     
     
     # The objective function for the IWAE is made of two terms
