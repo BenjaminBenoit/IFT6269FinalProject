@@ -13,9 +13,9 @@ UTILIY CLASS
 
 ######## IMPORT
 import torch
+import numpy as np
 from Settings import Settings
 import torch.nn.functional as Functional
-import numpy as np
 from torch.utils.data.sampler import SubsetRandomSampler
 
 
@@ -86,7 +86,25 @@ class Util:
         binaryCrossEntropy = Functional.binary_cross_entropy(posteriorResults, x.view(-1, 784), reduction='sum')
         klDivergence = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
         return binaryCrossEntropy + klDivergence
-
+    
+    
+    # See equation 14 from Burda's publication
+    def calculateLossIWAE(posteriorResults, mu, logvar, x):
+        loss = 0
+        costs = []
+        
+        for currentPosterior in posteriorResults:
+            binaryCrossEntropy = Functional.binary_cross_entropy(currentPosterior, x.view(-1, 784), reduction='sum')
+            klDivergence = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+            costs.append(binaryCrossEntropy+klDivergence)
+            
+        normalizedWeights = costs / np.sum(costs)
+        
+        for i, cost in enumerate(costs):
+            loss += cost * normalizedWeights[i]
+            
+        return loss
+    
 
     def saveFigure(fileName, axes):
         print("Todo")

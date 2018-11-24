@@ -47,6 +47,8 @@ class IWAE(nn.Module):
         return sampleZList
     
     # Once again unlike the VAE, we will decode several time : one for each sample z
+    # Hence the network will generate multiple approximate posterior samples
+    # The more sample we have, the more the lower bound approaches the true log-likelihood
     def decode(self, zList):
         outputList = []
         for indexGaussianSampler, z in enumerate(zList):
