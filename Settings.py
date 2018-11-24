@@ -14,9 +14,10 @@ class Settings:
     VALID_BATCH_SIZE = 128
     TESTING_BATCH_SIZE = 128
     
+    # TODO : check if it is still needed ?
     LOG_INFORMATION_INTERVAL = 1000
     
-    NUMBER_OF_EPOCH = 1000
+    NUMBER_OF_EPOCH = 1
     LOSSVARIATION = 0.0001         # Stop training if variation is smaller than it
     
     LEARNING_RATE = 0.001
@@ -24,7 +25,7 @@ class Settings:
     # Whether or not the model should run on the CPU or GPU
     # If DEVICE="cpu" then the model run on CPU
     # If DEVICE="cuda" then the model run on GPU
-    DEVICE = "cuda"
+    DEVICE = "cpu"
     
     # Note : this parameter is only used if DEVICE="cuda"
     # Beware of the memory usage when setting this parameter
@@ -36,9 +37,11 @@ class Settings:
     # If execution of the program freeze, put this parameter to false
     PIN_MEMORY = True
     
+    # Number of gaussian samplers when initializing an IWAE
+    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE = 2
     
-    # ==== IWAE SETTINGS
-    NUMBER_OF_GAUSSIAN_SAMPLERS = 2
-    
+    # An IWAE with only one gaussian sampler is equivalent to a VAE
+    # Here it is a constant used to initialize the VAE and it shouldn't be modified
+    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_VAE = 1
     
     

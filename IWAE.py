@@ -14,7 +14,6 @@ IWAE and VAE implementation
 ######## IMPORT
 import torch
 from torch import nn
-from Settings import Settings
 import torch.nn.functional as Functional
 
 
@@ -23,7 +22,7 @@ import torch.nn.functional as Functional
 # Inherit the nn.Module class which implement methods such as train and eval
 class IWAE(nn.Module):
     
-    def __init__(self):
+    def __init__(self, numberOfGaussianSampler):
         # Initialization of neuralNetwork.Module from pytorch
         super(IWAE, self).__init__()
         
@@ -32,6 +31,8 @@ class IWAE(nn.Module):
         self.varianceLayer = nn.Linear(400,20)
         self.decoderHiddenLayer = nn.Linear(20,400)
         self.outputLayer = nn.Linear(400,784)
+        # Number of time we will sample from a gaussian
+        self.numberOfGaussianSampler = numberOfGaussianSampler
      
     def encode(self, x):
         inputLayerOutput = Functional.relu(self.inputLayer(x))
@@ -41,7 +42,7 @@ class IWAE(nn.Module):
     def sampleZList(self, mu, logvar):
         sampleZList = []
         standardDeviation = torch.exp(logvar / 2)
-        for indexGaussianSampler in range(1, Settings.NUMBER_OF_GAUSSIAN_SAMPLERS+1):
+        for indexGaussianSampler in range(1, self.numberOfGaussianSampler+1):
             epsilon = torch.randn_like(logvar)
             sampleZList.append(mu + standardDeviation * epsilon)
         return sampleZList

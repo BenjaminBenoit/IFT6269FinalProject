@@ -14,6 +14,7 @@ UTILIY CLASS
 ######## IMPORT
 import torch
 import numpy as np
+from torch.autograd import Variable
 from Settings import Settings
 import torch.nn.functional as Functional
 from torch.utils.data.sampler import SubsetRandomSampler
@@ -31,7 +32,7 @@ class Util:
   
     
     
-    
+
     def train(model, trainLoader, optimizer, epoch):
         model.train()
         trainLoss = 0
@@ -43,7 +44,7 @@ class Util:
             # re-initialize the gradient computation
             optimizer.zero_grad()
             posteriorResults, mu, logvar = model(data)
-            loss = Util.calculateLossVAE(posteriorResults, mu, logvar, data)
+            loss = Util.calculateLoss(posteriorResults, mu, logvar, data)
             loss.backward()
             trainLoss += loss.item()
             optimizer.step()
@@ -67,7 +68,7 @@ class Util:
                 qt_data += len(data)
                 data = data.to(Settings.DEVICE)
                 posteriorResults, mu, logvar = model(data)
-                loss = Util.calculateLossVAE(posteriorResults, mu, logvar, data) 
+                loss = Util.calculateLoss(posteriorResults, mu, logvar, data) 
                 lossCumul += loss.item()
                 
         lossCumul /= qt_data
@@ -89,7 +90,8 @@ class Util:
     
     
     # See equation 14 from Burda's publication
-    def calculateLossIWAE(posteriorResults, mu, logvar, x):
+    # Note : if there is only one gaussian sampler, then calculateLoss is equivalent to calculateLossVAE
+    def calculateLoss(posteriorResults, mu, logvar, x):
         loss = 0
         costs = []
         
@@ -97,8 +99,11 @@ class Util:
             binaryCrossEntropy = Functional.binary_cross_entropy(currentPosterior, x.view(-1, 784), reduction='sum')
             klDivergence = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
             costs.append(binaryCrossEntropy+klDivergence)
-            
-        normalizedWeights = costs / np.sum(costs)
+
+        # costs is a list of tensors
+        # We want to normalize the weights but we also want to be able to do the backpropagation
+        # This is why we will use the Softmax to do the normalization
+        normalizedWeights = Functional.softmax(torch.Tensor(costs), dim=0)
         
         for i, cost in enumerate(costs):
             loss += cost * normalizedWeights[i]
