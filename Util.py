@@ -92,7 +92,7 @@ class Util:
         # costs is a list of tensors
         # We want to normalize the weights but we also want to be able to do the backpropagation
         # This is why we will use the Softmax to do the normalization
-        normalizedWeights = Functional.softmax(torch.Tensor(costs), dim=0)
+        normalizedWeights = Functional.softmax(torch.Tensor(costs), dim=0).to(Settings.DEVICE)
         
         for i, cost in enumerate(costs):
             loss += cost * normalizedWeights[i]
