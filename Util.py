@@ -17,6 +17,7 @@ import numpy as np
 from Settings import Settings
 import torch.nn.functional as Functional
 from torch.utils.data.sampler import SubsetRandomSampler
+import matplotlib.pyplot as plt
 
 
 ######## UTIL
@@ -106,6 +107,13 @@ class Util:
 
     def createGraphic(titleFigure, fileName, data):
         print("Todo")
+        
+    
+    def printOneMNIST(data):
+        plt.imshow(data[0], cmap='gray', interpolation='none')
+        plt.xticks([])
+        plt.yticks([])
+        plt.figure()
         
     
     def splitTrainSet(train_dataset, ratio=0.1):
