@@ -115,6 +115,36 @@ class Util:
         plt.yticks([])
         plt.figure()
         
+    def printGridMNIST(data, grid_dim, save_name):
+        fig=plt.figure(figsize=(6, 6))
+        #sample_out = 1.0 - sample_out
+        for i in range(grid_dim*grid_dim):
+            fig.add_subplot(grid_dim, grid_dim, i+1)
+            plt.imshow(data[i][0], cmap='gray', interpolation='none')
+            plt.axis('off')
+        plt.savefig('Figures/' + save_name)
+        plt.show()
+    
+    def MNIST_2d_reduction(model, dataset,  save_name):
+        z = np.ones((10000,2))
+        number = np.ones((10000,))        
+        for index, (data, target) in enumerate(dataset):
+            #qt_data += len(data)
+            data = data.to('cpu')
+            mu, logvar = model.encode(data.view(-1,784))
+            standardDeviation = torch.exp(logvar / 2)
+            epsilon = torch.randn_like(logvar)
+            ztransform = mu + standardDeviation * epsilon
+            z[index] = ztransform.detach().numpy()
+            number[index] = target.data.numpy()
+        
+        plt.figure(figsize=(10, 8)) 
+        plt.scatter(z[:, 0], z[:, 1] , c=number )
+        plt.colorbar()
+        plt.grid()
+        plt.savefig('Figures/' + save_name)
+        plt.show()
+        
     
     def splitTrainSet(train_dataset, ratio=0.1):
         """
@@ -186,7 +216,28 @@ class Util:
             # Save trained model
             torch.save(model.state_dict(), saveModelPath) 
     
-    
+    def calculate_NLL(model, Loader, k):
+        model.eval()
+        lossCumul = 0
+        qt_data = 0
+            
+            # No gradient descent is being made during testing
+        with torch.no_grad():
+            for index, (data, _) in enumerate(Loader):
+                qt_data += len(data)
+                data = data.to('cpu')
+                mu, logvar = model.encode(data.view(-1,784))
+                sampleZList = []
+                standardDeviation = torch.exp(logvar / 2)
+                for indexGaussianSampler in range(1, k+1):
+                        epsilon = torch.randn_like(logvar)
+                        sampleZList.append(mu + standardDeviation * epsilon)    
+                loss = Util.calculateLoss(model.decode(sampleZList), mu, logvar, data) 
+                lossCumul += loss.item() 
+        lossCumul /= qt_data
+        print('======> testing NLL: {:.4f}'.format(lossCumul))
+            
+        return lossCumul
     
     
     

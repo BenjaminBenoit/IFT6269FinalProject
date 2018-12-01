@@ -45,7 +45,7 @@ testLoader = torch.utils.data.DataLoader(currentTestingDataset, batch_size=Setti
 ######## CREATE MODEL
 
 # VAE is a special case of IWAE for which we take only 1 sample z
-modelVAE = IWAE(Settings.NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_VAE).to(Settings.DEVICE)
+modelVAE = IWAE(Settings.NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_VAE, Settings.DIMENSION_OF_Z).to(Settings.DEVICE)
 optimizer = optim.Adam(modelVAE.parameters(), lr=Settings.LEARNING_RATE)
 
 

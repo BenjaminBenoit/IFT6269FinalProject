@@ -18,7 +18,7 @@ IWAE and VAE implementation
 import torch
 from torch import nn
 import torch.nn.functional as Functional
-
+from Settings import Settings
 
 ######## MODEL
 
@@ -30,15 +30,17 @@ import torch.nn.functional as Functional
 # Inherit the nn.Module class which implement methods such as train and eval
 class IWAE(nn.Module):
     
-    def __init__(self, numberOfGaussianSampler):
+    def __init__(self, numberOfGaussianSampler, dimension_of_z):
         
         # Initialization of neuralNetwork.Module from pytorch
         super(IWAE, self).__init__()
         
         self.inputLayer = nn.Linear(784,400)
-        self.meanLayer = nn.Linear(400,20)
-        self.varianceLayer = nn.Linear(400,20)
-        self.decoderHiddenLayer = nn.Linear(20,400)
+        self.hidden_layer = nn.Linear(400,200)
+        self.meanLayer = nn.Linear(200,dimension_of_z)
+        self.varianceLayer = nn.Linear(200,dimension_of_z)
+        self.decoderLayer = nn.Linear(dimension_of_z,200)
+        self.decoderHiddenLayer = nn.Linear(200,400)
         self.outputLayer = nn.Linear(400,784)
         
         # Number of time we will sample from a gaussian
@@ -50,7 +52,8 @@ class IWAE(nn.Module):
     # The encoder will infer P(z|X) using Q(z|X), Q being a simpler distribution (here it's a Gaussian)        
     def encode(self, x):
         inputLayerOutput = Functional.relu(self.inputLayer(x))
-        return self.meanLayer(inputLayerOutput), self.varianceLayer(inputLayerOutput)
+        hiddenLayerOutput = Functional.relu(self.hidden_layer(inputLayerOutput))
+        return self.meanLayer(hiddenLayerOutput), self.varianceLayer(hiddenLayerOutput)
     
     
     # It's not possible to sample directly from the encoder output
@@ -78,7 +81,8 @@ class IWAE(nn.Module):
     def decode(self, zList):
         outputList = []
         for indexGaussianSampler, z in enumerate(zList):
-            decoderHiddenLayerOutput = Functional.relu(self.decoderHiddenLayer(z))
+            decoderLayerOutput = Functional.relu(self.decoderLayer(z))
+            decoderHiddenLayerOutput = Functional.relu(self.decoderHiddenLayer(decoderLayerOutput))
             output = torch.sigmoid(self.outputLayer(decoderHiddenLayerOutput))
             outputList.append(output)
         return outputList
@@ -90,4 +94,8 @@ class IWAE(nn.Module):
         mu, logvar = self.encode(x.view(-1,784))
         zList = self.sampleZList(mu, logvar)
         return self.decode(zList), mu, logvar
+    
+    
+    
+    
         

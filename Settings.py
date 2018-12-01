@@ -13,31 +13,34 @@ class Settings:
     DATASET_PATH='./data'
     
     # file path for vae saving results (only used if SAVE_RESULTS = True)
-    SAVE_INFO_PATH_VAE = "Savings/model_info.npy"
+    SAVE_INFO_PATH_VAE = "Savings/vae_model_Z20_info.npy"
     # file path for saving vae model (only used if SAVE_RESULTS = True)
-    SAVE_MODEL_PATH_VAE = "Savings/model_state_dict.pth"
+    SAVE_MODEL_PATH_VAE = "Savings/vae_model_Z20.pth"
     
     # file path for saving iwae results (only used if SAVE_RESULTS = True)
-    SAVE_INFO_PATH_IWAE = "Savings/iwae_model_info.npy"
+    SAVE_INFO_PATH_IWAE = "Savings/iwae_model_Z20_K50_info.npy"
     # file path for saving iwae model (only used if SAVE_RESULTS = True)
-    SAVE_MODEL_PATH_IWAE = "Savings/iwae_model_state_dict.pth"
+    SAVE_MODEL_PATH_IWAE = "Savings/iwae_model_Z20_K50.pth"
     
     
     # ================================================== MODEL RELATED SETTINGS
     TRAINING_BATCH_SIZE = 128
-    VALID_BATCH_SIZE = 128
-    TESTING_BATCH_SIZE = 128
+    VALID_BATCH_SIZE = 5000
+    TESTING_BATCH_SIZE = 10000
     
     # TODO : check if it is still needed ?
     LOG_INFORMATION_INTERVAL = 1000
     
-    NUMBER_OF_EPOCH = 4
+    NUMBER_OF_EPOCH = 20
     LOSSVARIATION = 0.0001         # Stop training if variation is smaller than it
     
     LEARNING_RATE = 0.001
     
+    #Dimension of latent vector Z
+    
+    DIMENSION_OF_Z = 20
     # Number of gaussian samplers when initializing an IWAE
-    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE = 2
+    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE = 50
     
     # An IWAE with only one gaussian sampler is equivalent to a VAE
     # Here it is a constant used to initialize the VAE and it shouldn't be modified

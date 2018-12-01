@@ -41,7 +41,7 @@ testLoader = torch.utils.data.DataLoader(currentTestingDataset, batch_size=Setti
 
 ######## CREATE MODEL
 
-modelIWAE = IWAE(Settings.NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE).to(Settings.DEVICE)
+modelIWAE = IWAE(Settings.NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE, Settings.DIMENSION_OF_Z).to(Settings.DEVICE)
 optimizer = optim.Adam(modelIWAE.parameters(), lr=Settings.LEARNING_RATE)
 
 
@@ -55,4 +55,5 @@ Util.runTrainValidTestOnModel(
         testLoader,
         Settings.SAVE_INFO_PATH_IWAE,
         Settings.SAVE_MODEL_PATH_IWAE)
+
 
