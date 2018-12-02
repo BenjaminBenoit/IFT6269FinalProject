@@ -86,7 +86,7 @@ sample_out_VAE, sample_out_IWAE = np.ones((n*n, 1, 28, 28)), np.ones((n*n, 1, 28
 
 for i in range(n):
     for j in range(n):
-        sample = [torch.randn(1,Settings.DIMENSION_OF_Z)]
+        sample = [torch.randn(1, 20)]
         sample_out_VAE[j + i*n] = VAE_model.decode(sample)[0][0].view(1,28,28).detach().numpy()
         sample_out_IWAE[j + i*n] = IWAE_model.decode(sample)[0][0].view(1,28,28).detach().numpy()
 
@@ -145,11 +145,11 @@ WARNING: Need to set Settings.device = 'cpu' and re-import Settings.py
 
 from Settings import Settings
 
-NLL_VAE_2D = Util.calculate_NLL(VAE_model_2D, TestDataset, 500)
-NLL_IWAE_2D = Util.calculate_NLL(IWAE_model_2D, TestDataset, 500)
+NLL_VAE_2D = Util.calculate_NLL(VAE_model_2D, TestDataset, 100)
+NLL_IWAE_2D = Util.calculate_NLL(IWAE_model_2D, TestDataset, 100)
 
-NLL_VAE_20D = Util.calculate_NLL(VAE_model, TestDataset, 500)
-NLL_IWAE_20D = Util.calculate_NLL(IWAE_model, TestDataset, 500)
+NLL_VAE_20D = Util.calculate_NLL(VAE_model, TestDataset, 100)
+NLL_IWAE_20D = Util.calculate_NLL(IWAE_model, TestDataset, 100)
 
 NLL_Results = pd.DataFrame([[NLL_VAE_2D, NLL_IWAE_2D], [NLL_VAE_20D, NLL_IWAE_20D]],
                            columns = ["NLL VAE", "NLL IWAE (k= 50)"],
