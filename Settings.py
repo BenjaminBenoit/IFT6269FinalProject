@@ -18,9 +18,9 @@ class Settings:
     SAVE_MODEL_PATH_VAE = "Savings/vae_model_Z2.pth"
     
     # file path for saving iwae results (only used if SAVE_RESULTS = True)
-    SAVE_INFO_PATH_IWAE = "Savings/iwae_model_Z2_K50_info.npy"
+    SAVE_INFO_PATH_IWAE = "Savings/iwae_model_Z20_K5000_info.npy"
     # file path for saving iwae model (only used if SAVE_RESULTS = True)
-    SAVE_MODEL_PATH_IWAE = "Savings/iwae_model_Z2_K50.pth"
+    SAVE_MODEL_PATH_IWAE = "Savings/iwae_model_Z20_K5000.pth"
     
     
     # ================================================== MODEL RELATED SETTINGS
@@ -31,16 +31,16 @@ class Settings:
     # TODO : check if it is still needed ?
     LOG_INFORMATION_INTERVAL = 1000
     
-    NUMBER_OF_EPOCH = 100
+    NUMBER_OF_EPOCH = 1000
     LOSSVARIATION = 0.0001         # Stop training if variation is smaller than it
     
     LEARNING_RATE = 0.001
     
     #Dimension of latent vector Z
     
-    DIMENSION_OF_Z = 2
+    DIMENSION_OF_Z = 20
     # Number of gaussian samplers when initializing an IWAE
-    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE = 50
+    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE = 5000
     
     # An IWAE with only one gaussian sampler is equivalent to a VAE
     # Here it is a constant used to initialize the VAE and it shouldn't be modified
@@ -51,7 +51,7 @@ class Settings:
     # Whether or not the model should run on the CPU or GPU
     # If DEVICE="cpu" then the model run on CPU
     # If DEVICE="cuda" then the model run on GPU
-    DEVICE = "cpu"
+    DEVICE = "cuda"
     
     # Note : this parameter is only used if DEVICE="cuda"
     # Beware of the memory usage when setting this parameter
