@@ -36,12 +36,19 @@ class IWAE(nn.Module):
         super(IWAE, self).__init__()
         
         self.inputLayer = nn.Linear(784,400)
+        nn.init.xavier_uniform(self.inputLayer.weight)             # Glorot initialization
         self.hidden_layer = nn.Linear(400,200)
+        nn.init.xavier_uniform(self.hidden_layer.weight)           # Glorot initialization
         self.meanLayer = nn.Linear(200,dimension_of_z)
+        nn.init.xavier_uniform(self.meanLayer.weight)              # Glorot initialization
         self.varianceLayer = nn.Linear(200,dimension_of_z)
+        nn.init.xavier_uniform(self.varianceLayer.weight)          # Glorot initialization
         self.decoderLayer = nn.Linear(dimension_of_z,200)
+        nn.init.xavier_uniform(self.decoderLayer.weight)           # Glorot initialization
         self.decoderHiddenLayer = nn.Linear(200,400)
+        nn.init.xavier_uniform(self.decoderHiddenLayer.weight)     # Glorot initialization
         self.outputLayer = nn.Linear(400,784)
+        nn.init.xavier_uniform(self.outputLayer.weight)            # Glorot initialization
         
         # Number of time we will sample from a gaussian
         self.numberOfGaussianSampler = numberOfGaussianSampler
