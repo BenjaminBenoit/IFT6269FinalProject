@@ -98,8 +98,7 @@ class Util:
         for i, cost in enumerate(costs):
             loss += cost * normalizedWeights[i]
             
-        return loss
-    
+        return loss   
 
     def saveFigure(fileName, axes):
         print("Todo")
