@@ -45,9 +45,9 @@ Load Model
 
 device = torch.device('cpu')
 IWAE_model = IWAE(50, 20)
-IWAE_model.load_state_dict(torch.load('Savings/iwae_model_Z20_K50.pth', map_location=device))
+IWAE_model.load_state_dict(torch.load('Savings/Fashion_iwae_model_Z20_K5.pth', map_location=device))
 VAE_model = IWAE(1, 20)
-VAE_model.load_state_dict(torch.load('Savings/vae_model_Z20.pth', map_location=device))
+VAE_model.load_state_dict(torch.load('Savings/Fashion_vae_model_Z20.pth', map_location=device))
 
 
 """
@@ -81,7 +81,7 @@ sample_out = IWAE_model.decode(sample)[0][0].view(1,28,28).detach().numpy()
 Util.printOneMNIST(sample_out)
 
 #Produce a full grid 
-n = 10
+n = 5
 sample_out_VAE, sample_out_IWAE = np.ones((n*n, 1, 28, 28)), np.ones((n*n, 1, 28, 28)) 
 
 for i in range(n):
@@ -91,9 +91,9 @@ for i in range(n):
         sample_out_IWAE[j + i*n] = IWAE_model.decode(sample)[0][0].view(1,28,28).detach().numpy()
 
 print("Samples of VAE exemples: ")     
-Util.printGridMNIST(sample_out_VAE, n, save_name = 'MNIST_generate_20D_VAE')
+Util.printGridMNIST(sample_out_VAE, n, save_name = 'FASHION_MNIST_generate_20D_VAE')
 print("Samples of IWAE exemples: ")     
-Util.printGridMNIST(sample_out_IWAE, n, save_name = 'MNIST_generate_20D_IWAE')
+Util.printGridMNIST(sample_out_IWAE, n, save_name = 'FASHION_MNIST_generate_20D_IWAE')
 
 """
 Print latent space examples 
@@ -145,15 +145,46 @@ WARNING: Need to set Settings.device = 'cpu' and re-import Settings.py
 
 from Settings import Settings
 
-NLL_VAE_2D = Util.calculate_NLL(VAE_model_2D, TestDataset, 100)
-NLL_IWAE_2D = Util.calculate_NLL(IWAE_model_2D, TestDataset, 100)
+device = torch.device('cpu')
+#importe relevant model
+IWAE_model_z2_k1 = IWAE(1, 2)
+IWAE_model_z2_k1.load_state_dict(torch.load('Savings/iwae_StateDict_bs128_lr0.001_z2_k1.pth', map_location=device))
+IWAE_model_z2_k5 = IWAE(5, 2)
+IWAE_model_z2_k5.load_state_dict(torch.load('Savings/iwae_StateDict_bs128_lr0.001_z2_k5.pth', map_location=device))
+IWAE_model_z2_k50 = IWAE(50, 2)
+IWAE_model_z2_k50.load_state_dict(torch.load('Savings/iwae_StateDict_bs128_lr0.001_z2_k50.pth', map_location=device))
 
-NLL_VAE_20D = Util.calculate_NLL(VAE_model, TestDataset, 100)
-NLL_IWAE_20D = Util.calculate_NLL(IWAE_model, TestDataset, 100)
+IWAE_model_z20_k1 = IWAE(1, 20)
+IWAE_model_z20_k1.load_state_dict(torch.load('Savings/iwae_StateDict_bs128_lr0.001_z20_k1.pth', map_location=device))
+IWAE_model_z20_k5 = IWAE(5, 20)
+IWAE_model_z20_k5.load_state_dict(torch.load('Savings/iwae_StateDict_bs128_lr0.001_z20_k5.pth', map_location=device))
+IWAE_model_z20_k50 = IWAE(50, 20)
+IWAE_model_z20_k50.load_state_dict(torch.load('Savings/iwae_StateDict_bs128_lr0.001_z20_k50.pth', map_location=device))
 
-NLL_Results = pd.DataFrame([[NLL_VAE_2D, NLL_IWAE_2D], [NLL_VAE_20D, NLL_IWAE_20D]],
-                           columns = ["NLL VAE", "NLL IWAE (k= 50)"],
-                           index = ["Dim. Z = 2", "Dim. Z = 20"])
+IWAE_model_z50_k1 = IWAE(1, 50)
+IWAE_model_z50_k1.load_state_dict(torch.load('Savings/iwae_StateDict_bs128_lr0.001_z50_k1.pth', map_location=device))
+IWAE_model_z50_k5 = IWAE(5, 50)
+IWAE_model_z50_k5.load_state_dict(torch.load('Savings/iwae_StateDict_bs128_lr0.001_z50_k5.pth', map_location=device))
+IWAE_model_z50_k50 = IWAE(50, 50)
+IWAE_model_z50_k50.load_state_dict(torch.load('Savings/iwae_StateDict_bs128_lr0.001_z50_k50.pth', map_location=device))
+
+
+NLL_VAE_2D = Util.calculate_NLL(IWAE_model_z2_k1, TestDataset, 100)
+NLL_IWAE_2D_K5 = Util.calculate_NLL(IWAE_model_z2_k5, TestDataset, 100)
+NLL_IWAE_2D_K50 = Util.calculate_NLL(IWAE_model_z2_k50, TestDataset, 100)
+
+NLL_VAE_20D = Util.calculate_NLL(IWAE_model_z20_k1, TestDataset, 100)
+NLL_IWAE_20D_K5 = Util.calculate_NLL(IWAE_model_z20_k5, TestDataset, 100)
+NLL_IWAE_20D_K50 = Util.calculate_NLL(IWAE_model_z20_k50, TestDataset, 100)
+
+NLL_VAE_50D = Util.calculate_NLL(IWAE_model_z50_k1, TestDataset, 100)
+NLL_IWAE_50D_K5 = Util.calculate_NLL(IWAE_model_z50_k5, TestDataset, 100)
+NLL_IWAE_50D_K50 = Util.calculate_NLL(IWAE_model_z50_k50, TestDataset, 100)
+
+NLL_Results = pd.DataFrame([[NLL_VAE_2D, NLL_IWAE_2D_K5, NLL_IWAE_2D_K50], [NLL_VAE_20D, NLL_IWAE_20D_K5, NLL_IWAE_20D_K50],
+                            [NLL_VAE_50D, NLL_IWAE_50D_K5, NLL_IWAE_50D_K50]],
+                           columns = ["NLL VAE", "NLL IWAE (k= 5)", "NLL IWAE (k= 50)"],
+                           index = ["Dim. Z = 2", "Dim. Z = 20", "Dim. Z = 50"])
 
 NLL_Results.to_csv("Figures/NLL_results.csv")
 

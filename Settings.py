@@ -10,17 +10,17 @@ class Settings:
     
     
     # =============================================================== FILE PATH
-    DATASET_PATH='./data'
+    DATASET_PATH='./data Fashion'
     
     # file path for vae saving results (only used if SAVE_RESULTS = True)
-    SAVE_INFO_PATH_VAE = "Savings/vae_model_Z2_info.npy"
+    SAVE_INFO_PATH_VAE = "Savings/iwae_Info_bs128_lr0.001_z20_k1.npy"
     # file path for saving vae model (only used if SAVE_RESULTS = True)
-    SAVE_MODEL_PATH_VAE = "Savings/vae_model_Z2.pth"
+    SAVE_MODEL_PATH_VAE = "Savings/iwae_StateDict_bs128_lr0.001_z20_k1.pth"
     
     # file path for saving iwae results (only used if SAVE_RESULTS = True)
-    SAVE_INFO_PATH_IWAE = "Savings/iwae_model_Z20_K5000_info.npy"
+    SAVE_INFO_PATH_IWAE = "Savings/Fashion_iwae_model_info_Z20_K5.npy"
     # file path for saving iwae model (only used if SAVE_RESULTS = True)
-    SAVE_MODEL_PATH_IWAE = "Savings/iwae_model_Z20_K5000.pth"
+    SAVE_MODEL_PATH_IWAE = "Savings/Fashion_iwae_model_Z20_K5.pth"
     
     
     # ================================================== MODEL RELATED SETTINGS
@@ -31,7 +31,7 @@ class Settings:
     # TODO : check if it is still needed ?
     LOG_INFORMATION_INTERVAL = 1000
     
-    NUMBER_OF_EPOCH = 1000
+    NUMBER_OF_EPOCH = 120
     LOSSVARIATION = 0.0001         # Stop training if variation is smaller than it
     
     LEARNING_RATE = 0.001
@@ -40,7 +40,7 @@ class Settings:
     
     DIMENSION_OF_Z = 20
     # Number of gaussian samplers when initializing an IWAE
-    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE = 5000
+    NUMBER_OF_GAUSSIAN_SAMPLERS_FOR_IWAE = 5
     
     # An IWAE with only one gaussian sampler is equivalent to a VAE
     # Here it is a constant used to initialize the VAE and it shouldn't be modified
